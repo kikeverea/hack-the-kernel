@@ -1,0 +1,29 @@
+What function initializes the kernel during boot, and what subsystems are currently initialized?
+    boot(), which is called by kmain(), the entry point. The Memory subsytem and Pseudo-File System are currently initialized.
+
+What VM system does your kernel use by default? What is wrong with it?
+	The DumbVM. It is barely enough to make te OS work.
+
+OS/161 ships with two working synchronization primitives. What are they?
+	Semaphore and lock.
+
+How do you create a thread in OS/161? Give some examples of code that currently creates multiple threads.
+	By calling thread_create(). E.g: thread_create() is called from within thread_fork() and cpu_create() to create new Threads.
+	
+OS/161 has a system for printing debugging messages to the console. How does it work? How could it be useful?
+	kprintf(). It works by acquiring a lock and sending characters to the console. It can be useful to be able to 'see' inside the program stpes as it runs.
+	
+What do copyin and copyout do? What is special about these functions compared to other approaches to copying memory in C, like memmove?
+	Copy a block of memory of length LEN from user-level address to kernel address.
+	
+What is a zombie thread?
+	A zombie thread is a joinable thread which has terminated, but which hasn't been joined. Normally, either a thread should be joined at some time, or it should be detached
+
+What is the difference between a thread sleeping and a thread yielding?
+	Sleep causes thread to suspend itself for 'x' milliseconds while yield suspends the thread and immediately moves it to the ready queue
+
+Explain the difference between machine dependent and machine independent code. Where would you put both in the OS/161 source tree?
+	Machine independent code can run on any machine architecture, while machine dependent must be implemented for each architecture it wants to run in. I would store both kind of codes separately from each other, the machine dependent code in the arch/ directory.
+
+What functions are used to enable and restore interrupts? Would this be sufficient to ensure mutual exclusion on an OS/161 kernel?
+	splx() in thread/spl.c
